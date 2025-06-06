@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import multer from "multer";
 import path from "path";
@@ -11,7 +12,7 @@ import { processImageTransformation } from "./ai/imageProcessor";
 const upload = multer({
   dest: 'uploads/',
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  fileFilter: (req, file, cb) => {
+  fileFilter: (req: any, file: any, cb: any) => {
     const allowedTypes = /jpeg|jpg|png|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
@@ -61,7 +62,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Check VIP access for VIP services
       if (transformationData.isVIP) {
-        const vipKey = req.headers['x-vip-key'] as string;
+        const vipKey = req.headers['x-vip-key'] as string | undefined;
         if (!vipKey) {
           return res.status(401).json({ error: 'VIP key required for this service' });
         }
@@ -77,8 +78,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         originalImageUrl: transformationData.originalImageUrl,
         prompt: transformationData.prompt,
         service: transformationData.service,
-        selectionData: transformationData.selectionData,
-        quality: transformationData.quality,
+        selectionData: transformationData.selectionData || undefined,
+        quality: transformationData.quality || "standard",
         isVIP: transformationData.isVIP || false
       });
 

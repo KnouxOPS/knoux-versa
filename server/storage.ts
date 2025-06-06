@@ -51,7 +51,11 @@ export class MemStorage implements IStorage {
   async createTransformation(insertTransformation: InsertTransformation): Promise<Transformation> {
     const id = this.currentTransformationId++;
     const transformation: Transformation = { 
-      ...insertTransformation, 
+      ...insertTransformation,
+      userId: insertTransformation.userId || null,
+      selectionData: insertTransformation.selectionData || null,
+      quality: insertTransformation.quality || "standard",
+      isVIP: insertTransformation.isVIP || false,
       id,
       createdAt: new Date()
     };
@@ -72,7 +76,9 @@ export class MemStorage implements IStorage {
   async createVipSession(insertVipSession: InsertVipSession): Promise<VipSession> {
     const id = this.currentVipSessionId++;
     const session: VipSession = { 
-      ...insertVipSession, 
+      ...insertVipSession,
+      isActive: insertVipSession.isActive !== undefined ? insertVipSession.isActive : true,
+      expiresAt: insertVipSession.expiresAt || null,
       id,
       createdAt: new Date()
     };

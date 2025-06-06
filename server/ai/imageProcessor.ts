@@ -4,7 +4,7 @@ interface ImageTransformRequest {
   originalImageUrl: string;
   prompt: string;
   service: string;
-  selectionData?: string;
+  selectionData?: string | undefined;
   quality: string;
   isVIP: boolean;
 }
