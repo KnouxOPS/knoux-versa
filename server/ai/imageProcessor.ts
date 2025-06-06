@@ -13,7 +13,14 @@ export async function processImageTransformation(request: ImageTransformRequest)
   const sdService = new StableDiffusionService();
   
   try {
-    const result = await sdService.transformImage(request);
+    const result = await sdService.transformImage({
+      prompt: request.prompt,
+      imageUrl: request.originalImageUrl,
+      service: request.service,
+      selectionData: request.selectionData,
+      quality: request.quality,
+      isVIP: request.isVIP
+    });
     
     if (!result.success) {
       throw new Error(result.error || 'Transformation failed');
